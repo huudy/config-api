@@ -6,7 +6,7 @@ The entire application is splitted into two files `app.ts` where the application
 
 ### ADD CONFIG FILES :<br />
 
-![envi](https://user-images.githubusercontent.com/15052640/99897390-6b7e7480-2c99-11eb-9bf6-8059c2abde14.png)<br />
+![envv](https://user-images.githubusercontent.com/15052640/99905187-b0bd9900-2ccf-11eb-8e2d-f91a8b058998.png)<br />
 content:
 
 - **dev.env:**<br />
@@ -64,7 +64,7 @@ content:
 
 ## Run the app
 
-    npm run start
+    npm run dev
 
 ## Run the tests
 
