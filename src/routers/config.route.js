@@ -61,9 +61,9 @@ router.get('/config/:client', async (req, res) => {
         let sort = { $sort: { _id: -1 } };
         let limit = { $limit: 1 };
 
-        const config = await configModel.aggregate([match, group, sort, limit]);
+        const latestVersionConfigResult = await configModel.aggregate([match, group, sort, limit]);
 
-        let configList = config
+        let config = latestVersionConfigResult
             .map((c) => {
                 return c.configs;
             })
@@ -74,8 +74,8 @@ router.get('/config/:client', async (req, res) => {
             })
             .shift();
 
-        if (configList) {
-            res.status(200).send(configList);
+        if (config) {
+            res.status(200).send(config);
         } else {
             res
                 .status(404)
@@ -138,12 +138,15 @@ router.put('/config/:client/:version', async (req, res) => {
         const client = req.params.client;
         const version = Number(req.params.version);
         const config = { client, version, key, value };
-        await configModel.replaceOne(
+        const replacedConfigRes = await configModel.replaceOne(
             { client: client, version: version, key: key },
-            config
+            config,
+            {upsert:true}
         );
-        const result = await configModel.findOne(config);
-        if (result) {
+        console.log(replacedConfigRes);
+        if (replacedConfigRes.n) {
+            const result = await configModel.findOne(config);
+
             res.status(200).send(result);
         } else {
             res.status(404).send({
@@ -151,7 +154,8 @@ router.put('/config/:client/:version', async (req, res) => {
             });
         }
     } catch (e) {
-        res.status(500).send()
+        console.log(e);
+        res.status(500).send(e)
     }
 })
 

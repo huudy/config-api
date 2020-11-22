@@ -7,6 +7,18 @@ const configOne = {
     key: 'margin',
     value :'10'
 }
+const configOneUpdate = {
+    client: 'android',
+    version: 1,
+    key: 'margin',
+    value :'20'
+}
+const configUpdateTwo = {
+    client: 'android',
+    version: 1,
+    key: 'margin',
+    value :'40'
+}
 const configTwo = {
     client: 'android',
     version: 1,
@@ -22,14 +34,13 @@ const configThree = {
 
 const setupDatabase = async () => {
     await configModel.deleteMany()
-    // await new configModel(configOne).save()
-    // await new configModel(configTwo).save()
-    // await new configModel(configThree).save()
+    await new configModel(configTwo).save()
+    await new configModel(configThree).save()
 }
 
 module.exports = {
     configOne,
-    configTwo,
-    configThree,
-    setupDatabase
+    configOneUpdate,
+    setupDatabase,
+    configUpdateTwo
 }
