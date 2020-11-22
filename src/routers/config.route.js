@@ -6,16 +6,15 @@ var log = require('log4js').getLogger("config");
 
 
 router.post('/config', async (req, res) => {
+    const config = new configModel({
+        ...req.body,
+    })
     try {
-        const config = new configModel({
-            ...req.body,
-        })
         let dbConfig = await configModel.findOne({
             client: config.client,
             version: Number(config.version),
             key: config.key         
         })
-        console.log(dbConfig);
         if(dbConfig){
             res.status(400).send({error:`Config for client ${config.client} with key ${config.key} already exists!`})
         }else{
@@ -23,10 +22,9 @@ router.post('/config', async (req, res) => {
             res.status(201).send(config)
         }
     } catch (e) {
-        console.log(e);
-        res.status(500).send({error:`There was an error when creating config for client ${client}`,message:e.message})
+        res.status(500).send({error:`There was an error when creating config for client ${config.client}`,message:e.message})
     } 
-}) //DONE
+}) 
 
 router.patch('/config', async (req, res) => {
     try {
@@ -46,7 +44,7 @@ router.patch('/config', async (req, res) => {
     } catch (e) {
         res.status(500).send({error:`There was an error when patching config for client ${client} version:${version}`,message:e.message})
     }
-}) //DONE
+}) 
 
 router.get('/config/:client', async (req, res) => {
     try {

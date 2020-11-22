@@ -23,9 +23,14 @@ const configSchema = new mongoose.Schema(
 			required: true,
 			type: String,
 		},
-	},
-	{ timestamps: true }
+	},{versionKey:false}
 );
+configSchema.methods.toJSON = function () {
+    const config = this
+    const configObject = config.toObject()
+    delete configObject._id
+    return configObject
+}
 
 const configModel = mongoose.model(
 	'Config',
